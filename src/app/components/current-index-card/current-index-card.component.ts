@@ -64,7 +64,7 @@ export class CurrentIndexCardComponent implements AfterViewInit, OnInit, OnDestr
   }
 
   getDateStr(date) {
-    return '${date.getDate()} ${this.months[date.getMonth()]}';
+    return date.getDate() + ' ' + this.months[date.getMonth()];
   }
 
   public loadData() {
