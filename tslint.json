@@ -39,6 +39,12 @@
     "object-literal-key-quotes": [
       true,
       "consistent-as-needed"
-    ]
+    ],
+    "no-else-after-return": false,
+    "no-parameter-reassignment": false,
+    "no-increment-decrement": false,
+    "object-shorthand-properties-first": false,
+    "align": false,
+    "import-name": false
   }
 }

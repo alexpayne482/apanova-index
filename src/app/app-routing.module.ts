@@ -6,6 +6,7 @@ import { LayoutsModule } from './layouts';
 import { CommonLayoutComponent } from './layouts/common-layout';
 import { DashboardComponent } from './pages/dashboard';
 import { InvestigationDetailComponent, InvestigationsComponent } from './pages/investigations';
+import { InvoiceDetailComponent, InvoicesComponent } from './pages/invoices';
 import { AuthGuard } from './services/auth';
 
 @NgModule({
@@ -17,11 +18,17 @@ import { AuthGuard } from './services/auth';
           path: 'app', canActivate: [AuthGuard], component: CommonLayoutComponent, children: [
             { path: 'dashboard', component: DashboardComponent, pathMatch: 'full' },
             { path: 'investigations', component: InvestigationsComponent, pathMatch: 'full' },
-            {
-              path: 'investigation',
+            { path: 'investigation',
               component: FormWrapperComponent,
               children: [
                 { path: ':id', component: InvestigationDetailComponent },
+              ],
+            },
+            { path: 'invoices', component: InvoicesComponent, pathMatch: 'full' },
+            { path: 'invoice',
+              component: FormWrapperComponent,
+              children: [
+                { path: ':id', component: InvoiceDetailComponent },
               ],
             },
           ],

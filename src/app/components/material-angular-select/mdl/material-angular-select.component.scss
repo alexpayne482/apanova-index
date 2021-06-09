@@ -1,0 +1,112 @@
+@import 'mdl/typography';
+
+@import 'mdl/menu';
+@import 'mdl/textfield';
+
+$getmdl-select-bg-color: $default-item-hover-bg-color !default;
+$getmdl-select-text-color: $text-color-primary !default;
+$getmdl-select-label-color: $input-text-highlight-color !default;
+$getmdl-select-height: 288px !default;
+
+/* scroll */
+$getmdl-select-scrollbar-thumb: #666 !default;
+$getmdl-select-scrollbar-track: #999 !default;
+
+material-angular-select, material-angular-select-typeahead {
+  display: block;
+  outline: none;
+  width: 100%;
+
+  .mas-textfield__input {
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .mas-textfield__label::after {
+    bottom: 22px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 0;
+  }
+
+  .mas-icon-toggle__label {
+    float: right;
+    margin-top: -20px;
+    transform: rotate(0);
+    transition: transform 0.3s;
+
+    &.arrow-drop-down {
+      width: 0;
+      height: 0;
+      box-sizing: content-box;
+      transform-origin: 50% 25%;
+      border: .3em solid transparent;
+      border-top-color: $getmdl-select-text-color;
+      cursor: pointer;
+    }
+  }
+
+  .mas-textfield.is-focused {
+    .mas-icon-toggle__label {
+      border-top-color: $getmdl-select-label-color;
+      transform: rotate(180deg);
+    }
+  }
+
+  .is-item-hover {
+    background-color: $getmdl-select-bg-color;
+  }
+
+  .mas-menu__container {
+    width: 100% !important;
+    margin-top: 2px;
+
+    .mas-menu {
+      width: 100%;
+
+      .mas-menu__item {
+        font-size: 16px;
+      }
+    }
+  }
+
+  .mas-textfield.is-focused,
+  .mas-textfield.is-dirty,
+  .mas-textfield.has-placeholder {
+    .mas-textfield__label {
+      color: $getmdl-select-label-color;
+    }
+  }
+
+  // custom scroll
+  ::-webkit-scrollbar {
+    width: 0.5rem;
+    height: 0.5rem;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: $getmdl-select-scrollbar-thumb;
+    cursor: pointer;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: $getmdl-select-scrollbar-track;
+  }
+}
+
+.material-angular-select__fix-height {
+  .mas-menu__container .mas-menu {
+    overflow-y: auto;
+    max-height: $getmdl-select-height !important;
+  }
+
+  .mas-menu.mas-menu--top-left {
+    bottom: auto;
+    top: 0;
+  }
+}
