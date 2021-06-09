@@ -39,13 +39,6 @@ invoicesRouter.get('/', invoices.get);
 invoicesRouter.get('/:id', invoices.getSingle);
 apiRouter.use('/invoices', invoicesRouter);
 
-// const waterUsageRouter = new Router();
-// waterUsageRouter.get('/', waterUsage.get);
-// waterUsageRouter.get('/locations', waterUsage.getLocations);
-// waterUsageRouter.get('/indexes', waterUsage.getIndexes);
-// waterUsageRouter.get('/invoices', waterUsage.getInvoices);
-// apiRouter.use('/water-usage', waterUsageRouter);
-
 rootRouter.use('/api', apiRouter);
 
 export default rootRouter;
