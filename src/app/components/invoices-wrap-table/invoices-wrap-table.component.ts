@@ -21,7 +21,7 @@ const HEADER_INVOICE = [
   },
   {
     id: 'value',
-    name: 'Amount',
+    name: 'Value (RON)',
     sort: 0,
   },
   {
@@ -72,14 +72,14 @@ export class InvoicesWrapTableComponent extends UpgradableComponent implements O
   public headers = [];
   public filterValues = {};
 
-  constructor(public investService: WaterUsageService) {
+  constructor(public waterUsageService: WaterUsageService) {
     super();
   }
 
   public ngOnInit() {
     this.headers = HEADER_INVOICE;
     if (this.config.isFilter) {
-      this.investService.filterValue()
+      this.waterUsageService.filterValue()
         .pipe(takeWhile(() => this.alive))
         .subscribe((filterValue) => {
           this.filterValues = filterValue;
@@ -109,11 +109,11 @@ export class InvoicesWrapTableComponent extends UpgradableComponent implements O
       fullFilter = Object.assign({}, fullFilter, { page: this.currentPage });
     }
 
-    this.investService.getInvoices(fullFilter)
+    this.waterUsageService.getInvoices(fullFilter)
       .pipe(takeWhile(() => this.alive))
       .subscribe((data) => {
         this.data = data.invoices
-          .map((v, i, a) => Object.assign({ date: v.date, index: v.index, quantity: i > 0 ? a[i].index - a[i - 1].index : 0, value: v.value, status: 'open' }))
+          .map((v, i, a) => Object.assign({ id: v.id, date: v.date, index: v.index, quantity: i > 0 ? a[i].index - a[i - 1].index : 0, value: v.value, status: 'open' }))
           .slice(1)
           .sort((a, b) => new Date(new Date(b.date).getTime() - new Date(a.date).getTime()).getTime());
         this.numPage = 1;       // data.pages;

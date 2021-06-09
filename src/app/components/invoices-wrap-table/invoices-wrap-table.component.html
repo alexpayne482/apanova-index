@@ -22,7 +22,9 @@
                       (changePage)="changePage($event)"></app-pagination>
 
       <div class="mdl-card__subtitle-text" style="width:7vh; text-align: right;" *ngIf="config.isAdmin">
-        <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored" data-upgraded=",MaterialButton"><i class="material-icons">add</i></button>
+        <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored" data-upgraded=",MaterialButton" (click)="onClick()" [routerLink]="['/app/invoice', 0]">
+          <i class="material-icons">add</i>
+        </button>
       </div>
 
     </div>
