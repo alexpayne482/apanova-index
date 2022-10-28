@@ -59,6 +59,9 @@ app.use(rootRouter);
 
 const port = 3000;
 
+import { initDBData } from './db/init-db'
+initDBData();
+
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}/`);
 });

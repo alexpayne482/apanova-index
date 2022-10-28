@@ -7,7 +7,9 @@ import * as investigations from './controllers/investigations';
 import * as locations from './controllers/locations';
 import * as indexes from './controllers/indexes';
 import * as invoices from './controllers/invoices';
-import * as waterUsage from './controllers/water-usage';
+import * as usage from './controllers/usage';
+import * as bills from './controllers/bills';
+import * as meterChange from './controllers/meter-change';
 
 const rootRouter = new Router();
 rootRouter.post('/login', login);
@@ -38,6 +40,19 @@ const invoicesRouter = new Router();
 invoicesRouter.get('/', invoices.get);
 invoicesRouter.get('/:id', invoices.getSingle);
 apiRouter.use('/invoices', invoicesRouter);
+
+const meterChangeRouter = new Router();
+meterChangeRouter.get('/', meterChange.get);
+apiRouter.use('/meter-change', meterChangeRouter);
+
+const usageRouter = new Router();
+usageRouter.get('/', usage.get);
+apiRouter.use('/usage', usageRouter);
+
+const billsRouter = new Router();
+billsRouter.get('/', bills.get);
+apiRouter.use('/bills', billsRouter);
+
 
 rootRouter.use('/api', apiRouter);
 

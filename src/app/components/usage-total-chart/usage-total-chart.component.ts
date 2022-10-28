@@ -31,7 +31,7 @@ export class UsageTotalChartComponent implements AfterViewInit, OnInit, OnDestro
   public alive = true;
 
   public indexes: {};
-  public invoices: any[];
+  //public invoices: any[];
   public locations: any[];
 
   constructor(public waterUsageService: WaterUsageService) {
@@ -73,8 +73,8 @@ export class UsageTotalChartComponent implements AfterViewInit, OnInit, OnDestro
       for (const key in this.indexes) {
         const colorIndex = index++ % this.colors.length;
         datasets.push({
-          type: 'bar',
-          label: this.locations.find(x => x.id == key).name,
+          type: key == 'general' ? 'line' : 'bar',
+          label: key,
           fill: false,
           lineTension: 0.2,
           backgroundColor: this.colors[colorIndex].fill,
@@ -96,32 +96,6 @@ export class UsageTotalChartComponent implements AfterViewInit, OnInit, OnDestro
           spanGaps: false,
         });
       }
-    }
-
-    if (this.invoices) {
-      datasets.push({
-        type: 'line',
-        label: 'invoice',
-        fill: false,
-        lineTension: 0.2,
-        backgroundColor: this.colors[9].fill,
-        borderColor: this.colors[9].main,
-        borderCapStyle: 'butt',
-        borderDash: [],
-        borderDashOffset: 0.0,
-        borderJoinStyle: 'miter',
-        pointBorderColor: this.colors[9].main,
-        pointBackgroundColor: '#fff',
-        pointBorderWidth: 1,
-        pointHoverRadius: 5,
-        pointHoverBackgroundColor: this.colors[9].main,
-        pointHoverBorderColor: 'rgba(220,220,220,1)',
-        pointHoverBorderWidth: 2,
-        pointRadius: 1,
-        pointHitRadius: 10,
-        data: this.invoices.map((v, i, a) => Object.assign({ x: this.getMonth(new Date(v.date)), y: i > 0 ? a[i].index - a[i - 1].index : 0 })).slice(1),
-        spanGaps: false,
-      });
     }
 
     const chartData = {
@@ -152,27 +126,26 @@ export class UsageTotalChartComponent implements AfterViewInit, OnInit, OnDestro
       .pipe(takeWhile(() => this.alive))
       .subscribe((dataloc) => {
         this.locations = dataloc.locations;
-        const ilocations = dataloc.locations.map(x => x.id);
-        this.waterUsageService.getIndexes({})
+        this.locations.push( { id: 0, name: "general" })
+        
+        this.waterUsageService.getUsage({})
           .pipe(takeWhile(() => this.alive))
           .subscribe((data) => {
             this.indexes = {};
-            for (const key in ilocations) {
-              const location = ilocations[key];
-              this.indexes[location] =
-                data.indexes
-                  .filter((v, i, a) => v.location === location)
-                  .map((v, i, a) => Object.assign({ x: this.getMonth(new Date(v.date)), y: i > 0 ? a[i].index - a[i - 1].index : 0 }))
-                  .slice(1);
+            for (const key in this.locations) {
+              const location = this.locations[key];
+              this.indexes[location.name] = data
+                  .filter((v, i, a) => v.location === location.id)
+                  .map((v, i, a) => Object.assign({ x: this.getMonth(new Date(v.date)), y: v.quantity }))
             }
             this.chartCreate();
           });
-        this.waterUsageService.getInvoices({})
-          .pipe(takeWhile(() => this.alive))
-          .subscribe((data) => {
-            this.invoices = data.invoices;
-            this.chartCreate();
-          });
+        // this.waterUsageService.getInvoices({})
+        //   .pipe(takeWhile(() => this.alive))
+        //   .subscribe((data) => {
+        //     this.invoices = data.invoices;
+        //     this.chartCreate();
+        //   });
       });
   }
 

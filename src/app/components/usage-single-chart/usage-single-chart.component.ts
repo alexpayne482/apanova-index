@@ -30,16 +30,16 @@ export class UsageSingleChartComponent implements AfterViewInit, OnInit, OnDestr
 
   public alive = true;
 
-  public indexes: any[];
   public locations: any[];
-
-  public locationNames = [''];
-  public locationFilter = { id: 0, name: ' ' };
+  public locationFilter = { id: 0, name: 'general' };
   public locationKeys = { value: 'id', title: 'name' };
 
+  public location = this.locationFilter;
+  public indexes: any[];
+  
   constructor(public waterUsageService: WaterUsageService) {
-    this.indexes = [];
     this.locations = [this.locationFilter];
+    this.indexes = [];
   }
 
   ngAfterViewInit(): void {
@@ -56,6 +56,7 @@ export class UsageSingleChartComponent implements AfterViewInit, OnInit, OnDestr
 
   public changeLocation(location) {
     // console.log('changed location \'' + location.name + '\' id: ' + location.id);
+    this.location = location;
     this.chartDestroy();
     this.loadChartData(location);
   }
@@ -78,12 +79,11 @@ export class UsageSingleChartComponent implements AfterViewInit, OnInit, OnDestr
 
   chartCreate() {
     const datasets = [];
-
     if (this.indexes) {
       const colorIndex = 7;
       datasets.push({
         type: 'line',
-        label: this.locationFilter.name,
+        label: this.location.name,
         fill: false,
         lineTension: 0.2,
         backgroundColor: this.colors[colorIndex].fill,
@@ -140,23 +140,18 @@ export class UsageSingleChartComponent implements AfterViewInit, OnInit, OnDestr
     this.waterUsageService.getLocations()
       .pipe(takeWhile(() => this.alive))
       .subscribe((data) => {
-        this.locations = data.locations;
-        this.locationNames = data.locations.map(x => x.name);
-        this.locationFilter = this.locations[0]; // will call changeLocation()
-        // this.changeLocation(this.locations[0]);
+        this.locations = [{ id: 0, name: "general" }].concat(data.locations);
       });
   }
 
   public loadChartData(locationFilter: object = {}) {
     const fullFilter = { location: locationFilter['id'] };
-
-    // console.log('get water usage for ' + JSON.stringify(fullFilter));
-    this.waterUsageService.getIndexes(fullFilter)
+    this.waterUsageService.getUsage(fullFilter)
       .pipe(takeWhile(() => this.alive))
       .subscribe((data) => {
-        this.indexes =
-          data.indexes
-            .map((v, i, a) => Object.assign({ x: this.getMonth(new Date(v.date)), y: i > 0 ? a[i].index - a[i - 1].index : 0 }))
+        this.indexes = [];
+        this.indexes = data
+            .map((v, i, a) => Object.assign({ x: this.getMonth(new Date(v.date)), y: v.quantity }))
             .slice(1);
         this.chartCreate();
       });

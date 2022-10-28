@@ -14,12 +14,15 @@ export class CurrentIndexCardComponent implements AfterViewInit, OnInit, OnDestr
 
   public alive = true;
 
-  public indexes: any[];
   public locations: any[];
 
   public locationNames = [''];
   public locationFilter = { id: 0, name: ' ' };
   public locationKeys = { value: 'id', title: 'name' };
+
+  public indexes: any[];
+  public bills: any[];
+  public location;
 
   public toPay = '0 RON';
   public toPayDate = '';
@@ -47,10 +50,12 @@ export class CurrentIndexCardComponent implements AfterViewInit, OnInit, OnDestr
 
   public changeLocation(location) {
     // console.log('changed location \'${location.name}\' id: ${location.id}');
+    this.location = location;
     this.toPay = '0 RON';
     this.currentIndex = 0;
     this.newIndex = 0;
     this.loadIndexes(location);
+    this.loadBills(location);
   }
 
   getMonth(date) {
@@ -77,19 +82,40 @@ export class CurrentIndexCardComponent implements AfterViewInit, OnInit, OnDestr
       });
   }
 
+  // TODO: add vtable in DB for spliting invoices based on personal consumption
+
+  public loadBills(locationFilter: object = {}) {
+    const fullFilter = { location: locationFilter['id'] };
+    // console.log('get water bills for ' + JSON.stringify(fullFilter));
+    this.waterUsageService.getBills(fullFilter)
+      .pipe(takeWhile(() => this.alive))
+      .subscribe((data) => {
+        this.bills = [].concat(data).sort((a, b) => new Date(new Date(b.date).getTime() - new Date(a.date).getTime()).getTime());
+        if (this.bills.length > 0) {
+          const lastBill = this.bills[0];
+          console.log(lastBill);
+        }
+      });
+  }
+
   public loadIndexes(locationFilter: object = {}) {
     const fullFilter = { location: locationFilter['id'] };
-
-    // console.log('get water usage for ${JSON.stringify(fullFilter)}');
+    // console.log('get water index for ' + JSON.stringify(fullFilter));
     this.waterUsageService.getIndexes(fullFilter)
       .pipe(takeWhile(() => this.alive))
       .subscribe((data) => {
-        this.indexes = data.indexes;
+        this.indexes = [].concat(data).sort((a, b) => new Date(new Date(b.date).getTime() - new Date(a.date).getTime()).getTime());
         if (this.indexes.length > 0) {
-          const currentMonth = this.getMonth(new Date());
-          const currentIndex = this.indexes.find(i => this.getMonth(new Date(i.date)) === currentMonth);
-          this.currentIndex = currentIndex.index;
-          this.currentIndexDate = this.getDateStr(new Date(currentIndex.date));
+          const lastIndex = this.indexes[0];
+          console.log(lastIndex);
+          this.currentIndex = lastIndex.index;
+          this.currentIndexDate = this.getDateStr(new Date(lastIndex.date));
+          // const currentMonth = this.getMonth(new Date());
+          // const currentIndex = this.indexes.find(i => this.getMonth(new Date(i.date)) === currentMonth);
+          // if (currentIndex) {
+          //   this.currentIndex = currentIndex.index;
+          //   this.currentIndexDate = this.getDateStr(new Date(currentIndex.date));
+          // }
         }
       });
   }

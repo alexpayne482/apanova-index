@@ -28,10 +28,6 @@ export class WaterUsageService {
     return this.http.get<{ indexes: any[] }>(`${this.url}/indexes?${params}`);
   }
 
-  // public getInvoices(): Observable<{ locations: any[] }> {
-  //   return this.http.get<{ locations: any[] }>(`${this.url}/invoices`);
-  // }
-
   public getInvoices(filters: object): Observable<{ invoices: any[] }> {
     const params = Object.keys(filters)
       .map(key => (filters[key] !== '') ? `${key}=${filters[key]}` : null)
@@ -42,6 +38,22 @@ export class WaterUsageService {
 
   public getInvoice(id): Observable<any> {
     return this.http.get(`${this.url}/invoices/${id}`);
+  }
+
+  public getUsage(filters: object): Observable<any[]> {
+    const params = Object.keys(filters)
+      .map(key => (filters[key] !== '') ? `${key}=${encodeURIComponent(filters[key])}` : null)
+      .filter(param => param)
+      .join('&');
+    return this.http.get<any[]>(`${this.url}/usage?${params}`);
+  }
+
+  public getBills(filters: object): Observable<any[]> {
+    const params = Object.keys(filters)
+      .map(key => (filters[key] !== '') ? `${key}=${encodeURIComponent(filters[key])}` : null)
+      .filter(param => param)
+      .join('&');
+    return this.http.get<any[]>(`${this.url}/bills?${params}`);
   }
 
   public filterValue() {
