@@ -16,9 +16,9 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MaterialMenu } from './mdl/material-menu';
 import { MaterialTextfield } from './mdl/material-textfield';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'material-angular-select', // tslint:disable-line

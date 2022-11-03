@@ -9,7 +9,8 @@ import { SidebarComponent as BaseSidebarComponent } from 'theme/components/sideb
 })
 
 export class SidebarComponent extends BaseSidebarComponent {
-  public title = 'darkboard';
+  public title = 'apanova';
+  public icon = 'water_damage';
   public menu = [
     { name: 'Dashboard', link: '/app/dashboard', icon: 'dashboard' },
 //    { name: 'Investigations', link: '/app/investigations', icon: 'grid_on' },

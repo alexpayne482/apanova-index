@@ -1,10 +1,9 @@
 <base-card>
   <base-card-title>
-    <h2 class="mdl-card__title-text">Water Usage</h2>
+    <h2 class="mdl-card__title-text">{{title}}</h2>
     <div class="mdl-layout-spacer"></div>
-    <div class="mdl-card__subtitle-text" style="width:20vh">
+    <div class="mdl-card__subtitle-text" style="width:15vh" *ngIf="isSingle">
         <material-angular-select [data]="locations"
-                                 [name]="'location'"
                                  [keys]="locationKeys"
                                  [currentValue]="locationFilter"
                                  (selectedValue)="changeLocation($event)"></material-angular-select>
@@ -12,7 +11,8 @@
   </base-card-title>
   <base-card-body>
     <div>
-      <canvas #usageSingleCanvas style="height:30vh"></canvas>
+      <canvas #usageCanvas style="height:30vh"></canvas>
     </div>
   </base-card-body>
 </base-card>
+

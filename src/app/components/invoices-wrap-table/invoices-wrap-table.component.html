@@ -7,14 +7,20 @@
   
       <div class="mdl-navigation" *ngIf="config.isPeriod">
         <a class="mdl-navigation__link"
-           [class.active]="period == periodTypes.week"
-           (click)="changePeriod(periodTypes.week)">Last week</a>
-        <a class="mdl-navigation__link"
            [class.active]="period == periodTypes.month"
            (click)="changePeriod(periodTypes.month)">Last month</a>
         <a class="mdl-navigation__link"
+           [class.active]="period == periodTypes.month3"
+           (click)="changePeriod(periodTypes.month3)">Last 3 months</a>
+           <a class="mdl-navigation__link"
+           [class.active]="period == periodTypes.month6"
+           (click)="changePeriod(periodTypes.month6)">Last 6 months</a>
+        <a class="mdl-navigation__link"
            [class.active]="period == periodTypes.year"
            (click)="changePeriod(periodTypes.year)">Last year</a>
+        <a class="mdl-navigation__link"
+           [class.active]="period == periodTypes.all"
+           (click)="changePeriod(periodTypes.all)">All</a>
       </div>
 
       <app-pagination *ngIf="config.isPagination"

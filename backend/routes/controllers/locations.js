@@ -1,5 +1,6 @@
 import { sample, sampleDate } from '../../utils';
 
+// TODO: move to a DB table
 const locations = [
     { id:  1, name: 'Villa 1' },
     { id:  2, name: 'Villa 2' },
@@ -9,14 +10,10 @@ const locations = [
 ];
 
 export const get = (req, res) => {
-    return res.json(getAll());
+    return res.json({ locations: locations });
 };
 
 export const getSingle = (req, res) => {
   const location = locations.find((location) => location.id === +req.params.id);
   return res.json(location);
 };
-
-function getAll() {
-  return { locations: locations };
-}

@@ -28,7 +28,7 @@ export class InvoiceDetailComponent extends UpgradableComponent implements OnIni
       this.waterUsageService.getInvoice(id)
         .subscribe((invoice) => {
           this.invoice = invoice;
-          console.log(JSON.stringify(this.invoice));
+          // console.log(JSON.stringify(this.invoice));
         });
     } else {
       this.isNew = true;

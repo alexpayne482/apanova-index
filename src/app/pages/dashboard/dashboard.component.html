@@ -1,7 +1,7 @@
 <div class="mdl-grid mdl-cell mdl-cell--9-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone mdl-cell--top">
 
   <div class="mdl-cell mdl-cell--8-col-desktop mdl-cell--8-col-tablet mdl-cell--12-col-phone">
-    <app-usage-single-chart></app-usage-single-chart>
+    <app-usage-chart title="Water Usage" [isSingle]="true"></app-usage-chart>
   </div>
 
   <div class="mdl-cell mdl-cell--4-col-desktop mdl-cell--4-col-tablet mdl-cell--12-col-phone">
@@ -9,7 +9,7 @@
   </div>
 
   <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--12-col-phone">
-    <app-usage-total-chart></app-usage-total-chart>
+    <app-usage-chart title="Water Usage - TOTAL" [isSingle]="false"></app-usage-chart>
   </div>
   
   <!-- <div class="mdl-cell mdl-cell--4-col-desktop mdl-cell--4-col-tablet mdl-cell--12-col-phone">

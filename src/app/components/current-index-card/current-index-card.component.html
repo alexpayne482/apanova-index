@@ -4,33 +4,36 @@
     <div class="mdl-layout-spacer"></div>
     <div class="mdl-card__subtitle-text" style="width:15vh">
         <material-angular-select [data]="locations"
-                                 [name]="'location'"
                                  [keys]="locationKeys"
                                  [currentValue]="locationFilter"
-                                 (selectedValue)="changeLocation($event)"></material-angular-select>
+                                 (selectedValue)="onLocationChange($event)"></material-angular-select>
     </div>
   </base-card-title>
   <base-card-body>
-    <form class="form form--basic">
+    <form class="form form--basic" [formGroup]="newIndexForm" (submit)="saveIndex()" novalidate>
       <div class="mdl-grid">
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
-            <input class="mdl-textfield__input" type="text" [value]="toPay" id="current_invoice" style="text-align: right;">
-            <label class="mdl-textfield__label" for="current_invoice">To pay</label>
-            <label class="mdl-textfield__label" for="current_invoice" style="text-align: right;">{{ toPayDate }}</label>
+            <input class="mdl-textfield__input" type="text" formControlName="toPay" id="toPay" style="text-align: right;">
+            <label class="mdl-textfield__label" for="toPay">To pay</label>
+            <label class="mdl-textfield__label" for="toPay" style="text-align: right;">{{ toPayDate }}</label>
           </div>
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
-            <input class="mdl-textfield__input" type="text" [value]="currentIndex" id="current_index" style="text-align: right;">
-            <label class="mdl-textfield__label" for="current_index">Current index</label>
-            <label class="mdl-textfield__label" for="current_index" style="text-align: right;">{{ currentIndexDate }}</label>
+            <input class="mdl-textfield__input" type="text" formControlName="currentIndex" id="currentIndex" style="text-align: right;">
+            <label class="mdl-textfield__label" for="currentIndex">Current index</label>
+            <label class="mdl-textfield__label" for="currentIndex" style="text-align: right;">{{ currentIndexDate }}</label>
           </div>
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
-            <input class="mdl-textfield__input" type="text" [value]="newIndex" id="new_index" style="text-align: right;">
-            <label class="mdl-textfield__label" for="new_index">Set new index</label>
-            <label class="mdl-textfield__label" for="new_index" style="text-align: right;">{{ newIndexDate }}</label>
+            <input class="mdl-textfield__input" type="text" id="newIndex" style="text-align: right;" 
+                   formControlName="newIndex"       
+                   pattern="{{numberPattern}}"
+                   (change)="onInputChange($event)">
+            <label class="mdl-textfield__label" for="newIndex">Set new index</label>
+            <label class="mdl-textfield__label" for="newIndex" style="text-align: right;">{{ newIndexDate }}</label>
           </div>
+          <div class="full-size color-text--red" *ngIf="error"> {{ error }}</div>
           <div style="height: 38px">&nbsp;</div>
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size" style="text-align: right;">
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-green" style="top: 0px; right: 0px">
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-green" style="top: 0px; right: 0px" type="submit">
               <i class="material-icons">save</i>SAVE</button>
           </div>
       </div>

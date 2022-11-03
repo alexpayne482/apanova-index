@@ -7,7 +7,7 @@ export const get = (req, res) => {
   if (req.query.location) {
     return res.json(db.getForLocation(+req.query.location));
   } else {
-    console.log(db.getAll());
+    // console.log(db.getAll());
     return res.json(db.getAll());
   }
 };

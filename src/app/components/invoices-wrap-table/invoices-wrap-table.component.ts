@@ -32,11 +32,11 @@ const HEADER_INVOICE = [
 ];
 
 const PERIOD_TYPES = {
-  today: 'today',
-  yesterday: 'yesterday',
-  week: 'week',
   month: 'month',
+  month3: 'month3',
+  month6: 'month6',
   year: 'year',
+  all: 'all',
 };
 
 @Component({
@@ -57,7 +57,7 @@ export class InvoicesWrapTableComponent extends UpgradableComponent implements O
     type: 'invoice', // 'invoice' | 'prediction'
     isAdmin: true,
     isPagination: true,
-    isPeriod: false,
+    isPeriod: true,
     title: 'Invoices',
     isFilter: false,
   };

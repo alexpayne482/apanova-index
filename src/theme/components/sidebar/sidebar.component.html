@@ -1,4 +1,4 @@
-<header>{{ title }}</header>
+<header><i *ngIf="icon" class="material-icons" role="presentation">{{ icon }}&nbsp;&nbsp;&nbsp;</i>{{ title }}</header>
 <nav class="mdl-navigation">
   <base-menu-item *ngFor="let item of menu" [data]="item"></base-menu-item>
 

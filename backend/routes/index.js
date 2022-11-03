@@ -47,6 +47,7 @@ apiRouter.use('/meter-change', meterChangeRouter);
 
 const usageRouter = new Router();
 usageRouter.get('/', usage.get);
+usageRouter.get('/:id', usage.getSingle);
 apiRouter.use('/usage', usageRouter);
 
 const billsRouter = new Router();

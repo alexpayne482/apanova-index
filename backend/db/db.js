@@ -1,3 +1,5 @@
+import { NONE_TYPE } from '@angular/compiler';
+
 const Database = require('better-sqlite3');
 const db = new Database('./waterusage.db');//, { verbose: console.log });
 
@@ -116,7 +118,7 @@ class InvoicesDB {
         return db.prepare('SELECT * FROM invoices WHERE id = ?').get(id);
     }
 
-    getForDate(date1, date2) {
+    getByDate(date1, date2) {
         if (typeof date2 !== 'undefined') {
             return db.prepare('SELECT * FROM invoices WHERE date(date) > date(?) and date(date) <= date(?)').all(date1.toISOString(), date2.toISOString());
         } else {
@@ -169,6 +171,7 @@ class UsageDB {
                         ORDER BY datetime(date) ASC
                     ) locIdx,
                     IIF (cast(strftime('%d', date) as integer) < 18, cast(strftime('%m', date) as integer), IIF(cast(strftime('%m', date) as integer) == 12, 1, cast(strftime('%m', date) as integer) + 1)) as month,
+                    cast(strftime('%Y', date) as integer) as year,
                     date, location, locationName, [index] 
                 FROM (
                     SELECT i.date, l.id as location, l.name as locationName, i.[index]
@@ -184,7 +187,8 @@ class UsageDB {
                 CREATE VIEW IF NOT EXISTS v_usage
                 AS
                 SELECT
-                    max(datetime(date)) as date, 
+                    max(datetime(date)) as date,
+                    year,
                     month, 
                     location, 
                     locationName, 
@@ -194,7 +198,7 @@ class UsageDB {
                     max(meterChanged) as meterChanged
                 FROM (
                     SELECT 
-                        x.date, x.month, x.location, x.locationName, 
+                        x.date, x.year, x.month, x.location, x.locationName, 
                         y.[index] as oldIndex, x.[index] as newIndex,
                         CASE WHEN c.id is not NULL THEN c.old - y.[index] + x.[index] - c.new
                             ELSE x.[index] - y.[index]
@@ -207,7 +211,7 @@ class UsageDB {
                         LEFT JOIN meter_changes c ON x.location = c.location and y.[index] <= c.old and x.[index] >= c.new
                     WHERE y.location is not NULL
                 ) y
-                GROUP BY month, location, locationName
+                GROUP BY year, month, location, locationName
         `).run();
     }
 
@@ -221,6 +225,28 @@ class UsageDB {
 
     getForLocation(location) {
         return db.prepare('SELECT * FROM v_usage WHERE location = ?').all(location);
+    }
+
+    get(filter = NONE_TYPE) {
+        if (!filter || Object.keys(filter).length === 0) {
+            return db.prepare('SELECT * FROM v_usage').all();
+        } else {
+            let sqlQuery = 'SELECT * FROM v_usage WHERE ';
+            let sqlParams = []
+            
+            if (typeof filter.location != 'undefined') {
+                sqlQuery += 'location = ? and ';
+                sqlParams.push(filter.location);
+            }
+            if (typeof filter.from != 'undefined') {
+                sqlQuery += 'date(date) > date(?) and ';
+                sqlParams.push(filter.from);
+            }
+            sqlQuery = sqlQuery.replace(/ and $/, '');
+
+            // console.log('UsageDB get: ' + sqlQuery + ' % ' + sqlParams);
+            return db.prepare(sqlQuery).all(sqlParams);
+        }
     }
 
     getAll() {

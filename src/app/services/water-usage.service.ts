@@ -28,6 +28,14 @@ export class WaterUsageService {
     return this.http.get<{ indexes: any[] }>(`${this.url}/indexes?${params}`);
   }
 
+  public setIndex(filters: object, index: number, indexDate: string): Observable<boolean> {
+    const params = Object.keys(filters)
+      .map(key => (filters[key] !== '') ? `${key}=${encodeURIComponent(filters[key])}` : null)
+      .filter(param => param)
+      .join('&');
+    return this.http.post<boolean>(`${this.url}/indexes?${params}`, { value: index, date: indexDate });
+  }
+
   public getInvoices(filters: object): Observable<{ invoices: any[] }> {
     const params = Object.keys(filters)
       .map(key => (filters[key] !== '') ? `${key}=${filters[key]}` : null)

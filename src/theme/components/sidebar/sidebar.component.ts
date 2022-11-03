@@ -8,4 +8,5 @@ import { Component, Input } from '@angular/core';
 export class SidebarComponent {
   @Input() public menu;
   @Input() public title = 'darkboard';
+  @Input() public icon = '';
 }
